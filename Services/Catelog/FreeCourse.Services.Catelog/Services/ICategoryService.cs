@@ -2,7 +2,7 @@
 
 namespace FreeCourse.Services.Catelog.Services
 {
-    internal interface ICategoryService
+    public interface ICategoryService
     {
         Task<Response<List<CategoryDto>>> GetAllAsync();
 

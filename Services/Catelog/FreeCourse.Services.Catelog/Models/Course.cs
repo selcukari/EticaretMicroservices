@@ -7,8 +7,8 @@ namespace FreeCourse.Services.Catelog.Models
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public int Id { get; set; }
-        public int Name { get; set; }
+        public string Id { get; set; }
+        public string Name { get; set; }
         public string Description { get; set; }
 
         [BsonRepresentation(BsonType.Decimal128)]
@@ -20,7 +20,7 @@ namespace FreeCourse.Services.Catelog.Models
         public DateTime CreatedTime { get; set; }
 
         [BsonRepresentation(BsonType.DateTime)]
-        public DateTime UpdateTime { get; set; }
+        public DateTime? UpdateTime { get; set; } = null;
 
         public Feature Feature { get; set; }
         public string CategoryId { get; set; }
