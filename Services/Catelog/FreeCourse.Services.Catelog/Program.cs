@@ -4,12 +4,23 @@ using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
+{
+    // token ile bu service koruma altýna alýnmýþ olacak
+    options.Authority = Configuration["IdentityServerURL"];
+    options.Audience = "resource_catalog";
+    options.RequireHttpsMetadata = false;
+});
+
 // Add services to the container.
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(opt => 
+{
+    opt.filters.Add(new AuthorizeFilter());
+});
 
 builder.Services.Configure<DatabaseSettings>(
     builder.Configuration.GetSection("DatabaseSettings"));
@@ -22,6 +33,8 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
+app.UseAuthentication();
 
 app.UseAuthorization();
 
