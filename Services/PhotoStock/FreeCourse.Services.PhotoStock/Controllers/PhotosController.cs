@@ -19,17 +19,23 @@ namespace FreeCourse.Services.PhotoStock.Controllers
                 if (photo != null && photo.Length > 0)
                 {
                     var now = DateTime.Now;
-                    var relativeFolder = $"\\{now.Year}\\{now.Month}\\{now.Day}";
-                    var fileName =
-                        $"{Guid.NewGuid().ToString().Replace("-", "").Substring(0, 8)}-{photo.FileName.ToLink()}";
-                    var relativePath = Path.Combine(relativeFolder, fileName);
+                    var extension = Path.GetExtension(photo.FileName).ToLower();
+                    var rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos");
+                    var relativeFolder = Path.Combine(now.Year.ToString(), now.Month.ToString(), now.Day.ToString());
+                    var folderPath = Path.Combine(rootPath, relativeFolder);
 
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos", relativePath);
+                    if (!Directory.Exists(folderPath))
+                    {
+                        Directory.CreateDirectory(folderPath);
+                    }
 
-                    using var stream = new FileStream(path, FileMode.Create);
+                    var fileName = $"{Guid.NewGuid().ToString().Substring(0, 8)}-{Path.GetFileNameWithoutExtension(photo.FileName)}{extension}";
+                    var fullPath = Path.Combine(folderPath, fileName);
+
+                    using var stream = new FileStream(fullPath, FileMode.Create);
                     await photo.CopyToAsync(stream, cancellationToken);
 
-                    var returnPath = "photos/" + path;
+                    var returnPath = $"photos/{relativeFolder}/{fileName}";
 
                     PhotoDto photoDto = new() { Url = returnPath };
 
