@@ -31,9 +31,8 @@ namespace FreeCourse.Services.PhotoStock.Controllers
             } catch (Exception ex)
                 {
                 return CreateActionResultInstance(Response<PhotoDto>.Fail($"photo is empty. {ex.Message}", 400));
-
             }
-
+            return CreateActionResultInstance(Response<PhotoDto>.Fail("photo is empty.", 400));
         }
 
         public IActionResult PhotoDelete(string photoUrl)
