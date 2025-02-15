@@ -1,4 +1,5 @@
 ﻿using FreeCourse.Services.PhotoStock.Dtos;
+using FreeCourse.Services.PhotoStock.Utils;
 using FreeCourse.Shared.ControllerBases;
 using FreeCourse.Shared.Dto;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -17,12 +18,18 @@ namespace FreeCourse.Services.PhotoStock.Controllers
             {
                 if (photo != null && photo.Length > 0)
                 {
-                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos", photo.FileName);
+                    var now = DateTime.Now;
+                    var relativeFolder = $"\\{now.Year}\\{now.Month}\\{now.Day}";
+                    var fileName =
+                        $"{Guid.NewGuid().ToString().Replace("-", "").Substring(0, 8)}-{photo.FileName.ToLink()}";
+                    var relativePath = Path.Combine(relativeFolder, fileName);
+
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos", relativePath);
 
                     using var stream = new FileStream(path, FileMode.Create);
                     await photo.CopyToAsync(stream, cancellationToken);
 
-                    var returnPath = "photos/" + photo.FileName;
+                    var returnPath = "photos/" + path;
 
                     PhotoDto photoDto = new() { Url = returnPath };
 

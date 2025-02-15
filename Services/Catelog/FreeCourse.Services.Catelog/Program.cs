@@ -1,5 +1,7 @@
 using FreeCourse.Services.Catelog.Services;
 using FreeCourse.Services.Catelog.Settings;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     // token ile bu service koruma altýna alýnmýþ olacak
-    options.Authority = Configuration["IdentityServerURL"];
+    options.Authority = builder.Configuration["IdentityServerURL"];
     options.Audience = "resource_catalog";
     options.RequireHttpsMetadata = false;
 });
@@ -19,7 +21,7 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 
 builder.Services.AddControllers(opt => 
 {
-    opt.filters.Add(new AuthorizeFilter()); // tum controllerlara token zorunluluðu getirir
+    opt.Filters.Add(new AuthorizeFilter()); // tum controllerlara token zorunluluðu getirir
 });
 
 builder.Services.Configure<DatabaseSettings>(
