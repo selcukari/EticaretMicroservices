@@ -19,7 +19,7 @@ builder.Services.AddScoped<ICourseService, CourseService>();
 
 builder.Services.AddControllers(opt => 
 {
-    opt.filters.Add(new AuthorizeFilter());
+    opt.filters.Add(new AuthorizeFilter()); // tum controllerlara token zorunluluðu getirir
 });
 
 builder.Services.Configure<DatabaseSettings>(

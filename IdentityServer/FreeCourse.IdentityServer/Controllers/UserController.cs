@@ -12,7 +12,6 @@ using static IdentityServer4.IdentityServerConstants;
 namespace FreeCourse.IdentityServer.Controllers
 {
     [Authorize(LocalApi.PolicyName)]
-    //[Route("api/[controller]/[action]")]
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : Controller
@@ -28,36 +27,51 @@ namespace FreeCourse.IdentityServer.Controllers
         [Route("signUp")]
         public async Task<IActionResult> SignUp(SignupDto signupDto)
         {
-            var user = new ApplicationUser
+            try
             {
-                UserName = signupDto.UserName,
-                Email = signupDto.Email,
-            };
+                var user = new ApplicationUser
+                {
+                    UserName = signupDto.UserName,
+                    Email = signupDto.Email,
+                };
 
-            var result = await _userManager.CreateAsync(user, signupDto.Password);
+                var result = await _userManager.CreateAsync(user, signupDto.Password);
 
-            if (!result.Succeeded)
-            {
-                
-                return BadRequest(new { Errors = result.Errors.Select(x => x.Description).ToList(), StatusCode = 400, isSuccessful = false });
+                if (!result.Succeeded)
+                {
+
+                    return BadRequest(new { Errors = result.Errors.Select(x => x.Description).ToList(), StatusCode = 400, isSuccessful = false });
+                }
+
+                return new OkObjectResult(new { StatusCode = 200, isSuccessful = true });
             }
-
-            return NoContent();
+            catch(System.Exception ex)
+            {
+                return BadRequest(new { Errors = ex.Message, StatusCode = 400, isSuccessful = false });
+            }
         }
 
         [HttpGet]
         [Route("getUser")]
         public async Task<IActionResult> GetUser()
         {
-            var userIdClaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
+            try
+            {
+                var userIdClaim = User.Claims.FirstOrDefault(x => x.Type == JwtRegisteredClaimNames.Sub);
 
-            if (userIdClaim == null) return BadRequest();
+                if (userIdClaim == null) return BadRequest();
 
-            var user = await _userManager.FindByIdAsync(userIdClaim.Value);
+                var user = await _userManager.FindByIdAsync(userIdClaim.Value);
 
-            if (user == null) return BadRequest();
+                if (user == null) return BadRequest();
 
-            return Ok(new { Id = user.Id, UserName = user.UserName, Email = user.Email });
+                return Ok(new { Id = user.Id, UserName = user.UserName, Email = user.Email });
+            }
+            catch
+            {
+                return BadRequest();
+
+            }
         }
     }
 }
