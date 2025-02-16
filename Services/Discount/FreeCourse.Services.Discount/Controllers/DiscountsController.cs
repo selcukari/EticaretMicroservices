@@ -1,4 +1,5 @@
-﻿using FreeCourse.Shared.ControllerBases;
+﻿using FreeCourse.Services.Discount.Services;
+using FreeCourse.Shared.ControllerBases;
 using FreeCourse.Shared.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Reflection;
@@ -6,7 +7,7 @@ using System.Reflection;
 namespace FreeCourse.Services.Discount.Controllers
 {
     [Route("api/[controller]")]
-    [ApiController]
+    [ApiController]// indirimlerin kontrolcüsü
     public class DiscountsController : CustomBaseController
     {
         private readonly IDiscountService _discountService;
