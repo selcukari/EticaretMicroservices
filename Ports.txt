@@ -1,3 +1,4 @@
 catelogServices: http: http://localhost:5011, ýýs: http://localhost:60847
 itentityServer: http: http://localhost:5001
 photosServer: http: http://localhost:5012
+basketServer: http: http://localhost:5013
