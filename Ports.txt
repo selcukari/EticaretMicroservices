@@ -3,3 +3,4 @@ itentityServer: http: http://localhost:5001
 photosServer: http: http://localhost:5012
 basketServer: http: http://localhost:5013
 discountServices: http://localhost:5014
+orderServices: http://localhost:5015
