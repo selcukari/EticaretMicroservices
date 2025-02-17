@@ -33,18 +33,19 @@ namespace FreeCourse.Services.Discount.Services
             return Response<List<Models.Discount>>.Success(discounts.ToList(), 200);
         }
 
-        public async Task<Response<Models.Discount>> GetByCodeAndUserId(string code, string userId)
+        public async Task<Response<List<Models.Discount>>> GetByCodeAndUserId(string code, string userId)
         {
             var discounts = await _dbConnection.QueryAsync<Models.Discount>("select * from discount where userid=@UserId and code=@Code", new { UserId = userId, Code = code });
 
-            var hasDiscount = discounts.FirstOrDefault();
+            var hasDiscounts = discounts.ToList();
 
-            if (hasDiscount == null)
+            if (hasDiscounts.Count <= 0)
             {
-                return Response<Models.Discount>.Fail("Discount not found", 404);
+                return Response<List<Models.Discount>>.Fail("Discount not found", 200);
+                // return Response<Models.Discount>.Fail("Discount not found", 404);
             }
 
-            return Response<Models.Discount>.Success(hasDiscount, 200);
+            return Response<List<Models.Discount>>.Success(hasDiscounts, 200);
         }
 
         public async Task<Response<Models.Discount>> GetById(int id)
