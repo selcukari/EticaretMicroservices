@@ -10,7 +10,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJw
 {
     // token ile bu service koruma altýna alýnmýþ olacak
     options.Authority = builder.Configuration["IdentityServerURL"];
-    options.Audience = "resource_catalog";
+    options.Audience = "resource_catelog";
     options.RequireHttpsMetadata = false;
 });
 

@@ -13,7 +13,7 @@ namespace FreeCourse.IdentityServer
     {
         public static IEnumerable<ApiResource> ApiResources => new ApiResource[]
         {
-            new ApiResource("resource_catalog"){Scopes={"catalog_fullpermission"}},
+            new ApiResource("resource_catelog"){Scopes={"catelog_fullpermission"}},
                new ApiResource("photo_stock_catalog"){Scopes={"photo_stock_fullpermission"}},
                new ApiResource("resource_basket"){Scopes={"basket_fullpermission"}},
                new ApiResource("resource_discount"){Scopes={"discount_fullpermission"}},
@@ -34,7 +34,7 @@ namespace FreeCourse.IdentityServer
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("catalog_fullpermission","Catalog API için full erişim"),
+                new ApiScope("catelog_fullpermission","Catelog API için full erişim"),
                 new ApiScope("photo_stock_fullpermission","Photo Stock API için full erişim"),
                 new ApiScope("basket_fullpermission","Basket API için full erişim"),
                 new ApiScope("discount_fullpermission","Discount API için full erişim"),
@@ -52,7 +52,7 @@ namespace FreeCourse.IdentityServer
                     ClientId="WebMvcClient",
                     ClientSecrets= {new Secret("secret".Sha256())},
                     AllowedGrantTypes= GrantTypes.ClientCredentials,
-                    AllowedScopes={ "catalog_fullpermission","photo_stock_fullpermission",IdentityServerConstants.LocalApi.ScopeName }
+                    AllowedScopes={ "catelog_fullpermission","photo_stock_fullpermission",IdentityServerConstants.LocalApi.ScopeName }
                 },
                    new Client
                 {   // reflesh token almak için
