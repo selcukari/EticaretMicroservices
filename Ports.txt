@@ -1,8 +1,9 @@
-catelogServices: http: http://localhost:5011, ýýs: http://localhost:60847
-itentityServer: http: http://localhost:5001
+catelogServices: http: http://localhost:5011, db:mongo-p:27017
+itentityServer: http: http://localhost:5001, db:sql-p:1433
 photosServer: http: http://localhost:5012
-basketServer: http: http://localhost:5013
-discountServices: http://localhost:5014
+basketServer: http: http://localhost:5013, db:redis-p:6379
+discountServices: http://localhost:5014, db:PostgreSql-p:5432
+orderServices: http://localhost:5015, db: sql-p:1444
 
 ** migration
 Add-Migration InitialMigration   ile oluþtur

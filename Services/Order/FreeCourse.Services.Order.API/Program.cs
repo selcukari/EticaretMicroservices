@@ -16,7 +16,7 @@ var requireAuthorizePolicy = new AuthorizationPolicyBuilder().RequireAuthenticat
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.Authority = builder.Configuration["IdentityServerURL"];
-    options.Audience = "resource_basket";
+    options.Audience = "resource_order";
     options.RequireHttpsMetadata = false;
     options.MapInboundClaims = false; // Claim mapping'i kapatýyoruz
 });
