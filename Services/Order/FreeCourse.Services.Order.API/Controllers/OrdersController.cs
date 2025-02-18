@@ -23,17 +23,35 @@ namespace FreeCourse.Services.Order.API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetOrders()
         {
-            var response = await _mediator.Send(new GetOrdersByUserIdQuery { UserId = _sharedIdentityService.GetUserId });
+            try
+            {
+                var response = await _mediator.Send(new GetOrdersByUserIdQuery { UserId = _sharedIdentityService.GetUserId });
 
-            return CreateActionResultInstance(response);
+                return CreateActionResultInstance(response);
+            }
+            catch (Exception ex)
+            {
+                // Hata loglaması yapılabilir
+                // _logger.LogError(ex, "An error occurred while retrieving orders");
+
+                return StatusCode(500, new { Message = "An error occurred while processing your request. Please try again later." });
+            }
+
         }
 
         [HttpPost]
         public async Task<IActionResult> SaveOrder(CreateOrderCommand createOrderCommand)
         {
-            var response = await _mediator.Send(createOrderCommand);
+            try
+            {
+                var response = await _mediator.Send(createOrderCommand);
 
-            return CreateActionResultInstance(response);
+                return CreateActionResultInstance(response);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Message = "An error occurred while processing your request. Please try again later." });
+            }
         }
     }
 }
