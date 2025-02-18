@@ -4,6 +4,8 @@ photosServer: http: http://localhost:5012
 basketServer: http: http://localhost:5013, db:redis-p:6379
 discountServices: http://localhost:5014, db:PostgreSql-p:5432
 orderServices: http://localhost:5015, db: sql-p:1444
+fakePaymentServices: http://localhost:5016
+gateway: http://localhost:5000
 
 ** migration
 Add-Migration InitialMigration   ile oluþtur
