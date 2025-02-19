@@ -12,6 +12,7 @@
             <div class="card-body">
 
                 <h5 class="card-title">Üye Giriş</h5>
+                @* kode daki model haataları göstermek için asp-validation-summary="ModelOnly" ekledik *@
                 <div class="text-danger" asp-validation-summary="ModelOnly"></div>
                 <form asp-controller="Auth" asp-action="SignIn" method="post">
                     <div class="mb-3">
