@@ -32,7 +32,7 @@ namespace FreeCourse.Web.Controllers
             if (!response.IsSuccessful)
             {
                 response.Errors.ForEach(x =>
-                {
+                {   // hataları ModelState'e ekliyoruz view tarafında göstermek için
                     ModelState.AddModelError(String.Empty, x);
                 });
 
