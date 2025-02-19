@@ -6,6 +6,7 @@ discountServices: http://localhost:5014, db:PostgreSql-p:5432
 orderServices: http://localhost:5015, db: sql-p:1444
 fakePaymentServices: http://localhost:5016
 gateway: http://localhost:5000
+web: http://localhost:5010
 
 ** migration
 Add-Migration InitialMigration   ile oluþtur
