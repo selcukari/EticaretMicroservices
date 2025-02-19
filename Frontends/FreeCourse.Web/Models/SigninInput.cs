@@ -4,9 +4,9 @@ namespace FreeCourse.Web.Models
 {
     public class SigninInput
     {
-        [Required]
-        [Display(Name = "Email adresiniz")]
-        public string Email { get; set; }
+        [Required(ErrorMessage = "Kullanıcı adı zorunludur.")]
+        [Display(Name = "UserName adresiniz")]
+        public string UserName { get; set; }
 
         [Required]
         [Display(Name = "Şifreniz")]

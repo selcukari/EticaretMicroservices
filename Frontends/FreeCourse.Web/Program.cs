@@ -1,5 +1,7 @@
 using FreeCourse.Shared.Services;
 using FreeCourse.Web.Models;
+using FreeCourse.Web.Services;
+using FreeCourse.Web.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 
@@ -14,13 +16,12 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 
 // Add services to the container.
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<ClientSettings>(builder.Configuration.GetSection("ClientSettings"));
 builder.Services.Configure<ServiceApiSettings>(builder.Configuration.GetSection("ServiceApiSettings"));
 
 builder.Services.AddScoped<ISharedIdentityService, SharedIdentityService>();
-
-builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient<IIdentityService, IdentityService>();
 
 builder.Services.AddControllersWithViews();
 

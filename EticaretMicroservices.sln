@@ -58,6 +58,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Frontends", "Frontends", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FreeCourse.Web", "Frontends\FreeCourse.Web\FreeCourse.Web.csproj", "{FAD7382D-F55A-4822-AA46-20478AC617D3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{57A30A2D-3FCA-4FBD-AAD6-A2ECEA1F8D4A}"
+	ProjectSection(SolutionItems) = preProject
+		ISharedIdentityService.cs = ISharedIdentityService.cs
+		SharedIdentityService.cs = SharedIdentityService.cs
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -145,6 +151,7 @@ Global
 		{0A069A61-C556-4045-B02C-F172EA82F561} = {4F005FAD-5F05-4343-9E16-58D06EB59FCF}
 		{F9FBE590-B673-4D6F-8B96-14ED5746E97C} = {EDF4FDEA-2F05-4EAD-A37E-4FDAB968DBBE}
 		{FAD7382D-F55A-4822-AA46-20478AC617D3} = {C9ECC6B0-3252-4101-839A-3612ACCAE082}
+		{57A30A2D-3FCA-4FBD-AAD6-A2ECEA1F8D4A} = {724CD568-2A4E-4F13-8AEA-D1FDC11305ED}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8B88A270-5AD2-4FE7-A81D-6B36A1BA709D}
