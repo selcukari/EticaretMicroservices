@@ -25,10 +25,14 @@ builder.Services.AddScoped<ISharedIdentityService, SharedIdentityService>();
 builder.Services.AddScoped<ResourceOwnerPasswordTokenHandler>();
 
 builder.Services.AddHttpClient<IIdentityService, IdentityService>();
-builder.Services.AddHttpClient<ICatelogService, CatelogService>();
-builder.Services.AddHttpClient<IPhotoStockService, PhotoStockService>();
+//builder.Services.AddHttpClient<IPhotoStockService, PhotoStockService>();
 
 var serviceApiSettings = builder.Configuration.GetSection("ServiceApiSettings").Get<ServiceApiSettings>();
+
+builder.Services.AddHttpClient<ICatelogService, CatelogService>(opt =>
+{
+    opt.BaseAddress = new Uri($"{serviceApiSettings.GatewayBaseUri}/{serviceApiSettings.Catelog.Path}");
+});
 
 builder.Services.AddHttpClient<IUserService, UserService>(opt =>
 {
