@@ -10,7 +10,12 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">Kurslar</h5>
-
+                @if (ViewBag.ErrorMessage != null)
+                {
+                    <div class="alert alert-danger">
+                        @ViewBag.ErrorMessage
+                    </div>
+                }
                 <a asp-controller="Courses" asp-action="Create" class="btn btn-primary mb-3">Kurs oluştur</a>
                 @if (Model.Any())
                 {

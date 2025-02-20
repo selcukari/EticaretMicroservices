@@ -39,17 +39,24 @@ namespace FreeCourse.Web.Controllers
         {
             var categories = await _catelogService.GetAllCategoryAsync();
             ViewBag.categoryList = new SelectList(categories, "Id", "Name");
+
             if (!ModelState.IsValid)
             {
                 return View();
             }
             courseCreateInput.UserId = _sharedIdentityService.GetUserId;
 
-            await _catelogService.CreateCourseAsync(courseCreateInput);
+            var savedCatelog = await _catelogService.CreateCourseAsync(courseCreateInput);
+
+            if (!savedCatelog)
+            {
+                ViewBag.ErrorMessage = "An error occurred while saving the course. Please try again.";
+                return View();
+            }
 
             return RedirectToAction(nameof(Index));
         }
-
+        // veriyi cekmek icin
         public async Task<IActionResult> Update(string id)
         {
             var course = await _catelogService.GetByCourseId(id);
@@ -57,7 +64,7 @@ namespace FreeCourse.Web.Controllers
 
             if (course == null)
             {
-                //mesaj göster
+                ViewBag.ErrorMessage = "The specified course could not be found. Please try again.";
                 RedirectToAction(nameof(Index));
             }
             ViewBag.categoryList = new SelectList(categories, "Id", "Name", course.Id);
@@ -76,7 +83,7 @@ namespace FreeCourse.Web.Controllers
             return View(courseUpdateInput);
         }
 
-        [HttpPost]
+        [HttpPost]// kayıt etmek icin
         public async Task<IActionResult> Update(CourseUpdateInput courseUpdateInput)
         {
             var categories = await _catelogService.GetAllCategoryAsync();
@@ -85,14 +92,27 @@ namespace FreeCourse.Web.Controllers
             {
                 return View();
             }
-            await _catelogService.UpdateCourseAsync(courseUpdateInput);
+            var savedCatelog = await _catelogService.UpdateCourseAsync(courseUpdateInput);
+
+            if (!savedCatelog)
+            {
+                ViewBag.ErrorMessage = "An error occurred while saving the course. Please try again.";
+
+                return View();
+            }
 
             return RedirectToAction(nameof(Index));
         }
 
         public async Task<IActionResult> Delete(string id)
         {
-            await _catelogService.DeleteCourseAsync(id);
+            var resultCatelog = await _catelogService.DeleteCourseAsync(id);
+
+            if (!resultCatelog)
+            {
+                ViewBag.ErrorMessage = "An error occurred while deleting the course. Please try again.";
+                return View();
+            }
 
             return RedirectToAction(nameof(Index));
         }

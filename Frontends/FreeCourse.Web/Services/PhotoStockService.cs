@@ -35,11 +35,12 @@ namespace FreeCourse.Web.Services
             var multipartContent = new MultipartFormDataContent();
 
             multipartContent.Add(new ByteArrayContent(ms.ToArray()), "photo", filename);
-
+                                                // ilk paremetre controller adı
             var response = await _httpClient.PostAsync("photos", multipartContent);
 
             if (!response.IsSuccessStatusCode)
             {
+                // loglama yapılabilir
                 return null;
             }
 
