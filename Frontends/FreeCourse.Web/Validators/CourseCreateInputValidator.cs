@@ -7,13 +7,13 @@ namespace FreeCourse.Web.Validators
     {
         public CourseCreateInputValidator()
         {
-            RuleFor(x => x.Name).NotEmpty().WithMessage("isim alanı boş olamaz");
-            RuleFor(x => x.Description).NotEmpty().WithMessage("açıklama alanı boş olamaz");
-            RuleFor(x => x.Feature.Duration).InclusiveBetween(1, int.MaxValue).WithMessage("süre alanı boş olamaz");
+            RuleFor(x => x.Name).NotEmpty().WithMessage("namespace cannot be empty");
+            RuleFor(x => x.Description).NotEmpty().WithMessage("description cannot be empty");
+            RuleFor(x => x.Feature.Duration).InclusiveBetween(1, int.MaxValue).WithMessage("duration cannot be empty");
 
             // 12345678.12 =>  şekilde 2 basamak ondalıklı sayı
-            RuleFor(x => x.Price).NotEmpty().WithMessage("fiyat alanı boş olamaz").ScalePrecision(2, 10).WithMessage("hatalı para formatı");
-            RuleFor(x => x.CategoryId).NotEmpty().WithMessage("kategori alanı seçiniz");
+            RuleFor(x => x.Price).NotEmpty().WithMessage("price cannot be empty").ScalePrecision(2, 10).WithMessage("incorrect currency format");
+            RuleFor(x => x.CategoryId).NotEmpty().WithMessage("select category field");
         }
     }
 }
