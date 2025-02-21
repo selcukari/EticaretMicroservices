@@ -35,7 +35,7 @@ namespace FreeCourse.Services.PhotoStock.Controllers
                     using var stream = new FileStream(fullPath, FileMode.Create);
                     await photo.CopyToAsync(stream, cancellationToken);
 
-                    var returnPath = $"photos/{relativeFolder}/{fileName}".Replace("\\", "/");
+                    var returnPath = $"{relativeFolder}/{fileName}".Replace("\\", "/");
 
                     PhotoDto photoDto = new() { Url = returnPath };
 
@@ -52,7 +52,7 @@ namespace FreeCourse.Services.PhotoStock.Controllers
         {
             try
             {
-                var rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos/");
+                var rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos");
                 var folderPath = Path.Combine(rootPath, photoUrl);
                 if (!System.IO.File.Exists(folderPath))
                 {
