@@ -40,10 +40,10 @@ namespace FreeCourse.Web.Controllers
             var categories = await _catelogService.GetAllCategoryAsync();
             ViewBag.categoryList = new SelectList(categories, "Id", "Name");
 
-            if (!ModelState.IsValid)
-            {
-                return View();
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return View();
+            //}
             courseCreateInput.UserId = _sharedIdentityService.GetUserId;
 
             var savedCatelog = await _catelogService.CreateCourseAsync(courseCreateInput);

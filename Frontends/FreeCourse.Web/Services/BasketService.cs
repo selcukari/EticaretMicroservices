@@ -1,5 +1,5 @@
 ﻿using FreeCourse.Shared.Dto;
-using FreeCourse.Web.Models.Basket;
+using FreeCourse.Web.Models.Baskets;
 using FreeCourse.Web.Services.Interfaces;
 
 namespace FreeCourse.Web.Services

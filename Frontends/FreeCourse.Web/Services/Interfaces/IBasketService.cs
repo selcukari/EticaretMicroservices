@@ -1,4 +1,4 @@
-﻿using FreeCourse.Web.Models.Basket;
+﻿using FreeCourse.Web.Models.Baskets;
 
 namespace FreeCourse.Web.Services.Interfaces
 {
