@@ -3,9 +3,9 @@ using FreeCourse.Web.Models.Catelogs;
 
 namespace FreeCourse.Web.Validators
 {
-    public class CourseCreateInputValidator : AbstractValidator<CourseCreateInput>
+    public class CourseUpdateInputValidator: AbstractValidator<CourseUpdateInput>
     {
-        public CourseCreateInputValidator()
+        public CourseUpdateInputValidator()
         {
             RuleFor(x => x.Name).NotEmpty().WithMessage("isim alanı boş olamaz");
             RuleFor(x => x.Description).NotEmpty().WithMessage("açıklama alanı boş olamaz");
@@ -13,7 +13,6 @@ namespace FreeCourse.Web.Validators
 
             // 12345678.12 =>  şekilde 2 basamak ondalıklı sayı
             RuleFor(x => x.Price).NotEmpty().WithMessage("fiyat alanı boş olamaz").ScalePrecision(2, 10).WithMessage("hatalı para formatı");
-            RuleFor(x => x.CategoryId).NotEmpty().WithMessage("kategori alanı seçiniz");
         }
     }
 }
