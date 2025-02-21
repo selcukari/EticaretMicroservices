@@ -51,6 +51,7 @@ namespace FreeCourse.Web.Controllers
         {
             if (!ModelState.IsValid)
             {
+                // bir requist den digerine veri tasıma
                 TempData["discountError"] = ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage).First();
                 return RedirectToAction(nameof(Index));
             }
@@ -62,7 +63,13 @@ namespace FreeCourse.Web.Controllers
 
         public async Task<IActionResult> CancelApplyDiscount()
         {
-            await _basketService.CancelApplyDiscount();
+            var cancelBasket = await _basketService.CancelApplyDiscount();
+
+            if (!cancelBasket)
+            {
+                TempData["discountError"] = "An error occurred while canceling the discount. Please try again.";
+                return BadRequest();
+            }
             return RedirectToAction(nameof(Index));
         }
     }

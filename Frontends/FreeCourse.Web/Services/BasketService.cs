@@ -35,7 +35,7 @@ namespace FreeCourse.Web.Services
 
             await SaveOrUpdate(basket);
         }
-
+        // indirim uygulama
         public async Task<bool> ApplyDiscount(string discountCode)
         {
             await CancelApplyDiscount();
@@ -53,10 +53,16 @@ namespace FreeCourse.Web.Services
             }
 
             basket.ApplyDiscount(hasDiscount.Code, hasDiscount.Rate);
-            await SaveOrUpdate(basket);
+            var savedBasket = await SaveOrUpdate(basket);
+
+            if (!savedBasket)
+            {
+                // loglama yapılabilir
+                return false;
+            }
             return true;
         }
-
+        // indirim iptal
         public async Task<bool> CancelApplyDiscount()
         {
             var basket = await Get();
