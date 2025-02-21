@@ -26,6 +26,12 @@ namespace FreeCourse.Web.Services
 
             var discount = await response.Content.ReadFromJsonAsync<Response<DiscountViewModel>>();
 
+            if (discount.Data == null)
+            {
+                // loglama yapılabilir
+                return null;
+            }
+
             return discount.Data;
         }
     }
