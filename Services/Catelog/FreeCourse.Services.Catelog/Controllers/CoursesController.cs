@@ -16,6 +16,14 @@ namespace FreeCourse.Services.Catelog.Controllers
             _courseService = courseService;
         }
 
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var response = await _courseService.GetAllAsync();
+
+            return CreateActionResultInstance(response);
+        }
+
         //courses/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(string id)
