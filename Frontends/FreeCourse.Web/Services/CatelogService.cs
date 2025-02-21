@@ -115,7 +115,12 @@ namespace FreeCourse.Web.Services
 
             if (resultPhotoService != null)
             {
-                await _photoStockService.DeletePhoto(courseUpdateInput.Picture);
+                var deletePhoto = await _photoStockService.DeletePhoto(courseUpdateInput.Picture); // oncekini sil
+
+                if (!deletePhoto)
+                {
+                    throw new Exception("An error occurred while deleting the previous photo.");
+                }
                 courseUpdateInput.Picture = resultPhotoService.Url;
             }
 
