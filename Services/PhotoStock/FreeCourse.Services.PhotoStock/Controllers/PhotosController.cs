@@ -16,31 +16,28 @@ namespace FreeCourse.Services.PhotoStock.Controllers
         {
             try
             {
-                if (photo != null && photo.Length > 0)
-                {
-                    var now = DateTime.Now;
-                    var extension = Path.GetExtension(photo.FileName).ToLower();
-                    var rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos");
-                    var relativeFolder = Path.Combine(now.Year.ToString(), now.Month.ToString(), now.Day.ToString());
-                    var folderPath = Path.Combine(rootPath, relativeFolder);
+                  var now = DateTime.Now;
+                  var extension = Path.GetExtension(photo.FileName).ToLower();
+                  var rootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/photos");
+                  var relativeFolder = Path.Combine(now.Year.ToString(), now.Month.ToString(), now.Day.ToString());
+                  var folderPath = Path.Combine(rootPath, relativeFolder);
 
-                    if (!Directory.Exists(folderPath))
-                    {
-                        Directory.CreateDirectory(folderPath);
-                    }
+                  if (!Directory.Exists(folderPath))
+                  {
+                      Directory.CreateDirectory(folderPath);
+                  }
 
-                    var fileName = $"{Guid.NewGuid().ToString().Substring(0, 8)}-{Path.GetFileNameWithoutExtension(photo.FileName)}{extension}";
-                    var fullPath = Path.Combine(folderPath, fileName);
+                  var fileName = $"{Guid.NewGuid().ToString().Substring(0, 8)}-{Path.GetFileNameWithoutExtension(photo.FileName)}{extension}";
+                  var fullPath = Path.Combine(folderPath, fileName);
 
-                    using var stream = new FileStream(fullPath, FileMode.Create);
-                    await photo.CopyToAsync(stream, cancellationToken);
+                  using var stream = new FileStream(fullPath, FileMode.Create);
+                  await photo.CopyToAsync(stream, cancellationToken);
 
-                    var returnPath = $"{relativeFolder}/{fileName}".Replace("\\", "/");
+                  var returnPath = $"{relativeFolder}/{fileName}".Replace("\\", "/");
 
-                    PhotoDto photoDto = new() { Url = returnPath };
+                  PhotoDto photoDto = new() { Url = returnPath };
 
-                    return CreateActionResultInstance(Response<PhotoDto>.Success(photoDto, 200));
-                }
+                  return CreateActionResultInstance(Response<PhotoDto>.Success(photoDto, 200));
             } catch (Exception ex)
                 {
                 return CreateActionResultInstance(Response<PhotoDto>.Fail($"photo is empty. {ex.Message}", 400));
