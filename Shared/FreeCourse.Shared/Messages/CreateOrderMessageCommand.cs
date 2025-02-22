@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace FreeCourse.Shared.Messages
 {
+    // rabbitmq üzerinden mesaj göndermek için kullanılacak model
     public class CreateOrderMessageCommand
     {
         public CreateOrderMessageCommand()

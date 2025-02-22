@@ -8,6 +8,9 @@ fakePaymentServices: http://localhost:5016			jwt(user) // odeme iþlemleri
 gateway: http://localhost:5000
 web: http://localhost:5010
 
+
+rabbit mq: uý-port:15672, p-5672
+
 courseControl.web
 	 public async Task<IActionResult> Create(CourseCreateInput courseCreateInput)  modelisvalid bak
 ** migration
