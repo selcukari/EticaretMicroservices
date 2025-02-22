@@ -26,7 +26,6 @@ namespace FreeCourse.Web.Services
                 return null;
             }
             // 
-            var filename = $"{Path.GetExtension(photo.FileName)}";
 
             using var ms = new MemoryStream();
 
@@ -34,7 +33,7 @@ namespace FreeCourse.Web.Services
 
             var multipartContent = new MultipartFormDataContent();
 
-            multipartContent.Add(new ByteArrayContent(ms.ToArray()), "photo", filename);
+            multipartContent.Add(new ByteArrayContent(ms.ToArray()), "photo", photo.FileName);
                                                 // ilk paremetre controller adı
             var response = await _httpClient.PostAsync("photos", multipartContent);
 
