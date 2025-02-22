@@ -14,6 +14,7 @@ namespace FreeCourse.Services.Order.Application.Dtos
         public AddressDto Address { get; set; }
 
         public string BuyerId { get; set; }
+        // public int PaymentNo { get; set; }
 
         public List<OrderItemDto> OrderItems { get; set; }
     }

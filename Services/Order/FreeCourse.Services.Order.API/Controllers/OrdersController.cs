@@ -46,11 +46,16 @@ namespace FreeCourse.Services.Order.API.Controllers
             {
                 var response = await _mediator.Send(createOrderCommand);
 
+                if (!response.IsSuccessful)
+                {
+                    return StatusCode(500, new { Message = "An error occurred while processing your request. Please try again later." });
+                }
+
                 return CreateActionResultInstance(response);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, new { Message = "An error occurred while processing your request. Please try again later." });
+                return StatusCode(500, new { Message = $"{ex.Message}" });
             }
         }
     }

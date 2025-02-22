@@ -18,6 +18,7 @@ namespace FreeCourse.Services.Order.Domain.OrderAggregate
         public Address Address { get; private set; }
 
         public string BuyerId { get; private set; }
+        //public int PaymentNo { get; set; }
 
         private readonly List<OrderItem> _orderItems;
 

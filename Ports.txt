@@ -1,10 +1,10 @@
-catelogServices: http: http://localhost:5011, db:mongo-p:27017, jwt(not user)
-itentityServer: http: http://localhost:5001, db:sql-p:1433
-photosServer: http: http://localhost:5012,                      jwt(not user)
+catelogServices: http: http://localhost:5011, db:mongo-p:27017, jwt(not user) // category, urunler
+itentityServer: http: http://localhost:5001, db:sql-p:1433		      // token dagýtýyor
+photosServer: http: http://localhost:5012,                      jwt(not user) // photo ekleme service
 basketServer: http: http://localhost:5013, db:redis-p:6379,     jwt(user) // kullanýcý uye olmadan da sepete eklesin, en sonunda uye olsun diye de yapýlabilir
 discountServices: http://localhost:5014, db:PostgreSql-p:5432,  jwt(user) // indirim iþlemlerini yapýyor
-orderServices: http://localhost:5015, db: sql-p:1444,           jwt(user)
-fakePaymentServices: http://localhost:5016
+orderServices: http://localhost:5015, db: sql-p:1444,           jwt(user) // sipariþ iþlemleri
+fakePaymentServices: http://localhost:5016			jwt(user) // odeme iþlemleri
 gateway: http://localhost:5000
 web: http://localhost:5010
 
