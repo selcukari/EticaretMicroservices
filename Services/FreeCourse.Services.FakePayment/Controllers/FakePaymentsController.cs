@@ -1,6 +1,5 @@
 ﻿using FreeCourse.Services.FakePayment.Models;
 using FreeCourse.Shared.ControllerBases;
-using FreeCourse.Shared.Dto;
 using FreeCourse.Shared.Messages;
 using MassTransit;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -24,31 +23,31 @@ namespace FreeCourse.Services.FakePayment.Controllers
         {
             try
             {
-                //paymentDto ile ödeme işlemi gerçekleştir.
+                //paymentDto ile ödeme işlemi gerçekleştir. gonderilen kuyruk ismi(create-order-service), send oldugu icin command tek service gonder
                 var sendEndpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri("queue:create-order-service"));
 
-                var createOrderMessageCommand = new CreateOrderMessageCommand();
-
-                createOrderMessageCommand.BuyerId = paymentDto.Order.BuyerId;
-                createOrderMessageCommand.Province = paymentDto.Order.Address.Province;
-                createOrderMessageCommand.District = paymentDto.Order.Address.District;
-                createOrderMessageCommand.Street = paymentDto.Order.Address.Street;
-                createOrderMessageCommand.Line = paymentDto.Order.Address.Line;
-                createOrderMessageCommand.ZipCode = paymentDto.Order.Address.ZipCode;
-
-                paymentDto.Order.OrderItems.ForEach(x =>
+                var createOrderMessageCommand = new CreateOrderMessageCommand
                 {
-                    createOrderMessageCommand.OrderItems.Add(new OrderItem
+                    BuyerId = paymentDto.Order.BuyerId,
+                    Province = paymentDto.Order.Address.Province,
+                    District = paymentDto.Order.Address.District,
+                    Street = paymentDto.Order.Address.Street,
+                    Line = paymentDto.Order.Address.Line,
+                    ZipCode = paymentDto.Order.Address.ZipCode,
+                    OrderItems = paymentDto.Order.OrderItems?.Select(x => new OrderItem
                     {
                         PictureUrl = x.PictureUrl,
                         Price = x.Price,
                         ProductId = x.ProductId,
                         ProductName = x.ProductName
-                    });
-                });
+                    }).ToList()
+                };
 
+                // rabbitMq kuyruga mesajı gönder, orderservice kuyrugu dinleyecek ve message'ı alacak, ama order service ayakta degilse message
+                // kuyrukta bekleyecek orderservice ayaga kalktıgında message'ı alacak ve islemi gerceklestirecek
                 await sendEndpoint.Send<CreateOrderMessageCommand>(createOrderMessageCommand);
 
+                // burda sipariş no donebiliriz ve web tarafında sipariş no ile siparişin durumunu sorgulayabiliriz(web-ordercontroller da)
                 return CreateActionResultInstance(Shared.Dto.Response<NoContent>.Success(200));
             }
             catch (Exception ex)
