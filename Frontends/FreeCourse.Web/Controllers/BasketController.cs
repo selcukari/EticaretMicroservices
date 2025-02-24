@@ -25,6 +25,12 @@ namespace FreeCourse.Web.Controllers
         {
             var course = await _catelogService.GetByCourseId(courseId);
 
+            if (course == null)
+            {
+                // loglama yapılabilir
+                return BadRequest();
+            }
+
             var basketItem = new BasketItemViewModel { CourseId = course.Id, CourseName = course.Name, Price = course.Price };
 
             await _basketService.AddBasketItem(basketItem);
