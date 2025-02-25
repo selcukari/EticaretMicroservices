@@ -43,7 +43,7 @@ namespace FreeCourse.Web.Controllers
             //1. yol senkron iletişim
             //  return RedirectToAction(nameof(SuccessfulCheckout), new { orderId = orderStatus.OrderId });
 
-            //2.yol asenkron iletişim
+            //2.yol asenkron iletişim, orderSuspend donen veride siparişno veya odemeno ya gore ayırabiliriz(SuccessfulCheckout sayfada ayırılabilir)
             return RedirectToAction(nameof(SuccessfulCheckout), new { orderId = DateTime.UtcNow.Ticks.GetHashCode() });
         }
 
@@ -51,6 +51,11 @@ namespace FreeCourse.Web.Controllers
         {
             ViewBag.orderId = orderId;
             return View();
+        }
+        // sipariş geçmişi
+        public async Task<IActionResult> CheckoutHistory()
+        {
+            return View(await _orderService.GetOrder());
         }
     }
 }

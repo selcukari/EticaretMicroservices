@@ -101,13 +101,18 @@ namespace FreeCourse.Web.Services
         public async Task<OrderSuspendViewModel> SuspendOrder(CheckoutInfoInput checkoutInfoInput)
         {
             var basket = await _basketService.Get();
+
+            if (basket == null)
+            {
+                return new OrderSuspendViewModel() { Error = "Basket could not be retrieved.", IsSuccessful = false };
+            }
             var orderCreateInput = new OrderCreateInput()
             {
                 BuyerId = _sharedIdentityService.GetUserId,
                 Address = new AddressCreateInput { Province = checkoutInfoInput.Province, District = checkoutInfoInput.District, Street = checkoutInfoInput.Street, Line = checkoutInfoInput.Line, ZipCode = checkoutInfoInput.ZipCode },
             };
 
-            basket.BasketItems.ForEach(x =>
+            basket.BasketItems?.ForEach(x =>
             {
                 var orderItem = new OrderItemCreateInput { ProductId = x.CourseId, Price = x.GetCurrentPrice, PictureUrl = "", ProductName = x.CourseName };
                 orderCreateInput.OrderItems.Add(orderItem);

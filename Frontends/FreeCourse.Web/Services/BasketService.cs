@@ -94,11 +94,6 @@ namespace FreeCourse.Web.Services
             }
             var basketViewModel = await response.Content.ReadFromJsonAsync<Response<BasketViewModel>>();
 
-            if (!basketViewModel.IsSuccessful)
-            {
-                return null;
-            }
-
             return basketViewModel.Data;
         }
 
