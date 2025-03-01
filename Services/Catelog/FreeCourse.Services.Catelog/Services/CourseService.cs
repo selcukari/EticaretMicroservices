@@ -2,6 +2,8 @@
 using FreeCourse.Services.Catelog.Models;
 using FreeCourse.Services.Catelog.Settings;
 using FreeCourse.Shared.Dto;
+using FreeCourse.Shared.Messages;
+using Mass = MassTransit;
 using Microsoft.AspNetCore.Http.HttpResults;
 using MongoDB.Driver;
 
@@ -12,8 +14,9 @@ namespace FreeCourse.Services.Catelog.Services
         private readonly IMongoCollection<Course> _courseCollection;
         private readonly IMongoCollection<Category> _categoryCollection;
         private readonly IMapper _mapper;
+        private readonly Mass.IPublishEndpoint _publishEndpoint;
 
-        public CourseService(IMapper mapper, IDatabaseSettings databaseSettings)
+        public CourseService(IMapper mapper, IDatabaseSettings databaseSettings, Mass.IPublishEndpoint publishEndpoint)
         {
             var client = new MongoClient(databaseSettings.ConectionString);
 
@@ -24,6 +27,8 @@ namespace FreeCourse.Services.Catelog.Services
             _categoryCollection = database.GetCollection<Category>(databaseSettings.CategoryCollectionName);
             _mapper = mapper;
 
+            _publishEndpoint = publishEndpoint;
+            _publishEndpoint = publishEndpoint;
         }
         public async Task<Response<CourseDto>> CreateAsync(CourseCreateDto courseCreateDto)
         {
@@ -141,6 +146,9 @@ namespace FreeCourse.Services.Catelog.Services
             {
                 return Response<NoContent>.Fail("Course not found", 404);
             }
+
+            // RabbitMQ Publish et, event at, eventi dinleyen servisler varsa onlar tetiklenir
+            await _publishEndpoint.Publish<CourseNameChangedEvent>(new CourseNameChangedEvent { CourseId = updateCourse.Id, UpdatedName = courseUpdateDto.Name });
 
             return Response<NoContent>.Success(204);
         }

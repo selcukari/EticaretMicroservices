@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 
 namespace FreeCourse.Services.Order.Application.Consumers
 {
+    // curs guncellendiginde event dinleyen consumer
     public class CourseNameChangedEventConsumer: IConsumer<CourseNameChangedEvent>
     {
         private readonly OrderDbContext _orderDbContext;
@@ -23,7 +24,14 @@ namespace FreeCourse.Services.Order.Application.Consumers
         {
             try
             {
+                // kuyruga gonderilen datayı bulur ve gunceller
                 var orderItems = await _orderDbContext.OrderItems.Where(x => x.ProductId == context.Message.CourseId).ToListAsync();
+
+                if (!orderItems.Any())
+                {
+                    // Log the exception or handle it as needed
+                    return;
+                }
 
                 orderItems.ForEach(x =>
                 {

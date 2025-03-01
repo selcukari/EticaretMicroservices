@@ -33,7 +33,7 @@ namespace FreeCourse.Web.Controllers
 
             var basketItem = new BasketItemViewModel { CourseId = course.Id, CourseName = course.Name, Price = course.Price };
 
-            await _basketService.AddBasketItem(basketItem);
+            var savedBasket = await _basketService.AddBasketItem(basketItem);
 
             // index sayfasına yönlendirme
             return RedirectToAction(nameof(Index));

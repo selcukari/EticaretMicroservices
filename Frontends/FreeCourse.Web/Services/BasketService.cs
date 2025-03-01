@@ -15,7 +15,7 @@ namespace FreeCourse.Web.Services
             _discountService = discountService;
         }
 
-        public async Task AddBasketItem(BasketItemViewModel basketItemViewModel)
+        public async Task<Boolean> AddBasketItem(BasketItemViewModel basketItemViewModel)
         {
             var basket = await Get();
 
@@ -33,7 +33,7 @@ namespace FreeCourse.Web.Services
                 basket.BasketItems.Add(basketItemViewModel);
             }
 
-            await SaveOrUpdate(basket);
+            return await SaveOrUpdate(basket);
         }
         // indirim uygulama
         public async Task<bool> ApplyDiscount(string discountCode)
