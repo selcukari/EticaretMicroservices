@@ -34,6 +34,8 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
+builder.Services.AddMassTransitHostedService();
+
 var requireAuthorizePolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 // calýþmadý
 // JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
