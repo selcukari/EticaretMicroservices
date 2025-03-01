@@ -54,7 +54,7 @@ namespace FreeCourse.IdentityServer
                     ClientId="WebMvcClient",
                     ClientSecrets= {new Secret("secret".Sha256())},
                     AllowedGrantTypes= GrantTypes.ClientCredentials,
-                    AllowedScopes={ "catelog_fullpermission","photo_stock_fullpermission", "gateway_fullpermission",IdentityServerConstants.LocalApi.ScopeName }
+                    AllowedScopes={ "catelog_fullpermission","photo_stock_fullpermission", "gateway_fullpermission", IdentityServerConstants.LocalApi.ScopeName }
                 },
                    new Client
                 {   // reflesh token almak için
