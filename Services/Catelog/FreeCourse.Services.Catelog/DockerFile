@@ -3,7 +3,7 @@ WORKDIR /app
 EXPOSE 80
 COPY Shared/FreeCourse.Shared/*.csproj Shared/FreeCourse.Shared/
 COPY Services/Catelog/FreeCourse.Services.Catelog/*.csproj Services/Catelog/FreeCourse.Services.Catelog/
-RUN dotnet restore Services/Catalog/FreeCourse.Services.Catelog/*.csproj
+RUN dotnet restore Services/Catelog/FreeCourse.Services.Catelog/*.csproj
 COPY . .
 RUN dotnet publish Services/Catelog/FreeCourse.Services.Catelog/*.csproj -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 as runtime

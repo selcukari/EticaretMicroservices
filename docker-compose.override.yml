@@ -224,7 +224,7 @@ services:
         condition: service_healthy
       identityserver.api:
         condition: service_healthy
-      catalog.api:
+      catelog.api:
         condition: service_healthy
       basket.api:
         condition: service_healthy
