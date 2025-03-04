@@ -5,8 +5,7 @@ using Ocelot.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration
-    .AddJsonFile($"configuration.{builder.Environment.EnvironmentName.ToLower()}.json")
-    .AddEnvironmentVariables();
+    .AddJsonFile($"configuration.{builder.Environment.EnvironmentName.ToLower()}.json");
 
 builder.Services.AddHttpClient<TokenExhangeDelegateHandler>();
 
@@ -16,7 +15,7 @@ builder.Services.AddAuthentication().AddJwtBearer("GatewayAuthenticationScheme",
     options.Audience = "resource_gateway";
     options.RequireHttpsMetadata = false;
 });
-// paymentservice ve discountservice istek yapýlýnca calýþacak olan token exchange handler
+// paymentservice ve discountservice istek yapï¿½lï¿½nca calï¿½ï¿½acak olan token exchange handler
 builder.Services.AddOcelot().AddDelegatingHandler<TokenExhangeDelegateHandler>();
 
 var app = builder.Build();

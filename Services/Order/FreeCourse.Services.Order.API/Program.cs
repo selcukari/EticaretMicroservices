@@ -10,16 +10,6 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-void ApplyDatabaseMigrations(WebApplication app)
-{
-    using (var scope = app.Services.CreateScope())
-    {
-        var serviceProvider = scope.ServiceProvider;
-        var orderDbContext = serviceProvider.GetRequiredService<OrderDbContext>();
-        orderDbContext.Database.Migrate();
-    }
-}
-
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<CreateOrderMessageCommandConsumer>();
@@ -44,7 +34,7 @@ builder.Services.AddMassTransit(x =>
     });
 });
 
-builder.Services.AddMassTransitHostedService();
+// builder.Services.AddMassTransitHostedService();
 
 var requireAuthorizePolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
 // cal��mad�
@@ -81,6 +71,13 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var serviceProvider = scope.ServiceProvider;
+    var orderDbContext = serviceProvider.GetRequiredService<OrderDbContext>();
+    orderDbContext.Database.Migrate();
+}
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -91,9 +88,7 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 
 app.UseAuthorization();
-ApplyDatabaseMigrations(app);
 
-app.Run();
 app.MapControllers();
 
 app.Run();

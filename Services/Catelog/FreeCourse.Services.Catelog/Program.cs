@@ -4,6 +4,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.Extensions.Options;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,20 +24,20 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
-    // token ile bu service koruma altýna alýnmýþ olacak
+    // token ile bu service koruma altï¿½na alï¿½nmï¿½ï¿½ olacak
     options.Authority = builder.Configuration["IdentityServerURL"];
     options.Audience = "resource_catelog";
     options.RequireHttpsMetadata = false;
 });
 
 // Add services to the container.
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICourseService, CourseService>();
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 builder.Services.AddControllers(opt => 
 {
-    opt.Filters.Add(new AuthorizeFilter()); // tum controllerlara token zorunluluðu getirir
+    opt.Filters.Add(new AuthorizeFilter()); // tum controllerlara token zorunluluï¿½u getirir
 });
 
 builder.Services.Configure<DatabaseSettings>(
