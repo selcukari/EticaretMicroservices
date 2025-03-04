@@ -10,6 +10,16 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+void ApplyDatabaseMigrations(WebApplication app)
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var serviceProvider = scope.ServiceProvider;
+        var orderDbContext = serviceProvider.GetRequiredService<OrderDbContext>();
+        orderDbContext.Database.Migrate();
+    }
+}
+
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumer<CreateOrderMessageCommandConsumer>();
@@ -37,14 +47,14 @@ builder.Services.AddMassTransit(x =>
 builder.Services.AddMassTransitHostedService();
 
 var requireAuthorizePolicy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-// calýþmadý
+// calï¿½ï¿½madï¿½
 // JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Remove("sub");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme).AddJwtBearer(options =>
 {
     options.Authority = builder.Configuration["IdentityServerURL"];
     options.Audience = "resource_order";
     options.RequireHttpsMetadata = false;
-    options.MapInboundClaims = false; // Claim mapping'i kapatýyoruz
+    options.MapInboundClaims = false; // Claim mapping'i kapatï¿½yoruz
 });
 
 // Add services to the container.
@@ -55,7 +65,7 @@ builder.Services.AddMediatR(typeof(FreeCourse.Services.Order.Application.Handler
 
 builder.Services.AddControllers(opt =>
 {
-    opt.Filters.Add(new AuthorizeFilter(requireAuthorizePolicy)); // tum controllerlara token zorunluluðu getirir
+    opt.Filters.Add(new AuthorizeFilter(requireAuthorizePolicy)); // tum controllerlara token zorunluluï¿½u getirir
 });
 
 builder.Services.AddDbContext<OrderDbContext>(opt =>
@@ -81,7 +91,9 @@ if (app.Environment.IsDevelopment())
 app.UseAuthentication();
 
 app.UseAuthorization();
+ApplyDatabaseMigrations(app);
 
+app.Run();
 app.MapControllers();
 
 app.Run();

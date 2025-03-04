@@ -1,4 +1,4 @@
-version: "20.10"
+version: "3.8"
 services:
   catelogdb:
     container_name: catelogdb
@@ -7,21 +7,23 @@ services:
       - "27017:27017"
     volumes:
       - catelogdb_volume:/data/db
-    healthcheck:
-      test: ["CMD-SHELL", "mongo --eval 'db.adminCommand(\"ping\")'"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
+    # healthcheck:
+    #   test: ["CMD", "mongosh --eval 'db.adminCommand(\"ping\")'"]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 20s
   basketdb:
     container_name: basketdb
     restart: always
     ports:
       - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
+    # healthcheck:
+    #   test: ["CMD", "redis-cli", "ping"]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 20s
   discountdb:
     container_name: discountdb
     restart: always
@@ -33,11 +35,12 @@ services:
       - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=Sa@2021!
       - POSTGRES_DB=postgres
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U admin -d discountdb"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U admin -d postgres"]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 20s
   identitydb:
     container_name: identitydb
     restart: always
@@ -48,11 +51,6 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Sa@2021!
-    healthcheck:
-      test: ["CMD-SHELL", "sqlcmd -S localhost -U sa -P Sa@2021! -Q 'SELECT 1'"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
   orderdb:
     container_name: orderdb
     restart: always
@@ -63,11 +61,6 @@ services:
     environment:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Sa@2021!
-    healthcheck:
-      test: ["CMD-SHELL", "sqlcmd -S localhost -U sa -P Sa@2021! -Q 'SELECT 1'"]
-      interval: 10s
-      timeout: 10s
-      retries: 5
   rabbitmq:
     container_name: rabbitmq
     restart: always
@@ -79,8 +72,10 @@ services:
       interval: 10s
       timeout: 10s
       retries: 5
+      start_period: 20s
   catelog.api:
     container_name: catelog.api
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - RabbitMQUrl=rabbitmq
@@ -88,14 +83,9 @@ services:
       - DatabaseSettings:ConnectionString=mongodb://catelogdb:27017
     ports:
       - "5011:80"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://catelog.api || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     depends_on:
-      catelogdb:
-        condition: service_healthy
+      - catelogdb
+      # catelogdb: // healtcheck halledince bak buraya
   identityserver.api:
     container_name: identityserver.api
     restart: on-failure
@@ -105,15 +95,17 @@ services:
     ports:
       - "5001:80"
     depends_on:
-      identitydb:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://http://identityserver.api/.well-known/openid-configuration || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+      - identitydb
+      # identitydb:
+      #   condition: service_healthy
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://identityserver.api/.well-known/openid-configuration || exit 1"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
   basket.api:
     container_name: basket.api
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - IdentityServerURL=http://identityserver.api
@@ -122,91 +114,63 @@ services:
     ports:
       - "5013:80"
     depends_on:
-      basketdb:
-        condition: service_healthy
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://http://basket.api || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
+     - basketdb
   photostock.api:
     container_name: photostock.api
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - IdentityServerURL=http://identityserver.api
     ports:
       - "5012:80"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://photostock.api || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     volumes:
       - type: bind
         source: C:\Users\Selcuk\Desktop\photos
         target: /app/wwwroot/photos
   discount.api:
     container_name: discount.api
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - IdentityServerURL=http://identityserver.api
       - "ConnectionStrings:PostgreSql=User ID=admin; Password=Sa@2021!; Server=discountdb; Port=5432;Database=discountdb;Integrated Security=true;Pooling=true"
     ports:
       - "5014:80"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://http://discount.api || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     depends_on:
       discountdb:
         condition: service_healthy
   fakepayment.api:
     container_name: fakepayment.api
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - IdentityServerURL=http://identityserver.api
       - RabbitMQUrl=rabbitmq
     ports:
       - "5016:80"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://http://fakepayment.api || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     depends_on:
       rabbitmq:
         condition: service_healthy
   order.api:
     container_name: order.api
-    restart: on-failure
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - IdentityServerURL=http://identityserver.api
       - RabbitMQUrl=rabbitmq
-      - "ConnectionStrings:DefaultConnection=Server=orderdb,1433;Database=OrderDb; User=sa; Password=Sa@2021!"
+      - "ConnectionStrings:DefaultConnection=Server=orderdb,1433;Database=orderdb; User=sa; Password=Sa@2021!"
     ports:
       - "5015:80"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://order.api || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     depends_on:
-      orderdb:
-        condition: service_healthy
+      - orderdb
   gateway.api:
     container_name: gateway.api
+    restart: always
     environment:
       - ASPNETCORE_ENVIRONMENT=Production
       - IdentityServerURL=http://identityserver.api
     ports:
       - "5000:80"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://gateway.api || exit 1"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
     depends_on:
       identityserver.api:
         condition: service_healthy
@@ -220,19 +184,12 @@ services:
     ports:
       - "5010:80"
     depends_on:
-      gateway.api:
-        condition: service_healthy
-      identityserver.api:
-        condition: service_healthy
-      catelog.api:
-        condition: service_healthy
-      basket.api:
-        condition: service_healthy
-      discount.api:
-        condition: service_healthy
-      order.api:
-        condition: service_healthy
-      photostock.api:
-        condition: service_healthy
-      fakepayment.api:
-        condition: service_healthy
+      - gateway.api
+      - identityserver.api
+      - catelog.api
+      - basket.api
+      - discount.api
+      - order.api
+      - photostock.api
+      - fakepayment.api
+      
