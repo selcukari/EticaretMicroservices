@@ -1,0 +1,195 @@
+version: "3.8"
+services:
+  catelogdb:
+    container_name: catelogdb
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - catelogdb_volume:/data/db
+    # healthcheck:
+    #   test: ["CMD", "mongosh --eval 'db.adminCommand(\"ping\")'"]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 20s
+  basketdb:
+    container_name: basketdb
+    restart: always
+    ports:
+      - "6379:6379"
+    # healthcheck:
+    #   test: ["CMD", "redis-cli", "ping"]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 20s
+  discountdb:
+    container_name: discountdb
+    restart: always
+    ports:
+      - "5432:5432"
+    volumes:
+      - discount_volume:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=Sa@2021!
+      - POSTGRES_DB=postgres
+    # healthcheck:
+    #   test: ["CMD-SHELL", "pg_isready -U admin -d postgres"]
+    #   interval: 10s
+    #   timeout: 10s
+    #   retries: 5
+    #   start_period: 20s
+  identitydb:
+    container_name: identitydb
+    restart: always
+    ports:
+      - "1433:1433"
+    volumes:
+      - identitydb_volume:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Sa@2021!
+  orderdb:
+    container_name: orderdb
+    restart: always
+    ports:
+      - "1444:1433"
+    volumes:
+      - orderdb_volume:/var/opt/mssql
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Sa@2021!
+  rabbitmq:
+    container_name: rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
+      start_period: 20s
+  catelog.api:
+    container_name: catelog.api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - RabbitMQUrl=rabbitmq
+      - IdentityServerURL=http://identityserver.api
+      - DatabaseSettings:ConnectionString=mongodb://catelogdb:27017
+    ports:
+      - "5011:80"
+    depends_on:
+      - catelogdb
+      # catelogdb: // healtcheck halledince bak buraya
+  identityserver.api:
+    container_name: identityserver.api
+    restart: on-failure
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - "ConnectionStrings:DefaultConnection=Server=identitydb,1433;Database=IdentityDb; User=sa; Password=Sa@2021!"
+    ports:
+      - "5001:80"
+    depends_on:
+      - identitydb
+      # identitydb:
+      #   condition: service_healthy
+    # healthcheck:
+    #   test: ["CMD-SHELL", "curl -f http://identityserver.api/.well-known/openid-configuration || exit 1"]
+    #   interval: 30s
+    #   timeout: 10s
+    #   retries: 3
+  basket.api:
+    container_name: basket.api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerURL=http://identityserver.api
+      - RedisSettings:Port=6379
+      - RedisSettings:Host=basketdb
+    ports:
+      - "5013:80"
+    depends_on:
+     - basketdb
+  photostock.api:
+    container_name: photostock.api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerURL=http://identityserver.api
+    ports:
+      - "5012:80"
+    volumes:
+      - type: bind
+        source: C:\Users\Selcuk\Desktop\photos
+        target: /app/wwwroot/photos
+  discount.api:
+    container_name: discount.api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerURL=http://identityserver.api
+      - "ConnectionStrings:PostgreSql=User ID=admin; Password=Sa@2021!; Server=discountdb; Port=5432;Database=discountdb;Integrated Security=true;Pooling=true"
+    ports:
+      - "5014:80"
+    depends_on:
+      discountdb:
+        condition: service_healthy
+  fakepayment.api:
+    container_name: fakepayment.api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerURL=http://identityserver.api
+      - RabbitMQUrl=rabbitmq
+    ports:
+      - "5016:80"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+  order.api:
+    container_name: order.api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - IdentityServerURL=http://identityserver.api
+      - RabbitMQUrl=rabbitmq
+      - "ConnectionStrings:DefaultConnection=Server=orderdb,1433;Database=orderdb; User=sa; Password=Sa@2021!"
+    ports:
+      - "5015:80"
+    depends_on:
+      - orderdb
+  gateway.api:
+    container_name: gateway.api
+    restart: always
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - IdentityServerURL=http://identityserver.api
+    ports:
+      - "5000:80"
+    depends_on:
+      identityserver.api:
+        condition: service_healthy
+  aspnetcoremvc.web:
+    container_name: aspnetcoremvc.web
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ServiceApiSettings:IdentityBaseUri=http://identityserver.api
+      - ServiceApiSettings:GatewayBaseUri=http://gateway.api
+
+    ports:
+      - "5010:80"
+    depends_on:
+      - gateway.api
+      - identityserver.api
+      - catelog.api
+      - basket.api
+      - discount.api
+      - order.api
+      - photostock.api
+      - fakepayment.api
+      

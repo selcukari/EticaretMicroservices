@@ -1,18 +1,19 @@
 catelogServices: http: http://localhost:5011, db:mongo-p:27017, jwt(not user) // category, urunler
-itentityServer: http: http://localhost:5001, db:sql-p:1433		      // token dagýtýyor
+itentityServer: http: http://localhost:5001, db:sql-p:1433		      // token dagÄ±tÄ±yor
 photosServer: http: http://localhost:5012,                      jwt(not user) // photo ekleme service
-basketServer: http: http://localhost:5013, db:redis-p:6379,     jwt(user) // kullanýcý uye olmadan da sepete eklesin, en sonunda uye olsun diye de yapýlabilir
-discountServices: http://localhost:5014, db:PostgreSql-p:5432,  jwt(user) // indirim iþlemlerini yapýyor
-orderServices: http://localhost:5015, db: sql-p:1444,           jwt(user) // sipariþ iþlemleri
-fakePaymentServices: http://localhost:5016			jwt(user) // odeme iþlemleri
+basketServer: http: http://localhost:5013, db:redis-p:6379,     jwt(user) // kullanÄ±cÄ± uye olmadan da sepete eklesin, en sonunda uye olsun diye de yapï¿½labilir
+discountServices: http://localhost:5014, db:PostgreSql-p:5432,  jwt(user) // indirim iÅŸlemlerini yapÄ±yor
+orderServices: http://localhost:5015, db: sql-p:1444,           jwt(user) // sipariÅŸ iÅŸlemleri
+fakePaymentServices: http://localhost:5016			jwt(user) // odeme iÅŸlemleri
 gateway: http://localhost:5000
 web: http://localhost:5010
 
 
-rabbit mq: uý-port:15672, p-5672
+rabbit mq: uï¿½-port:15672, p-5672
+rabbitmq da : canlÄ± ya cÄ±kÄ±nca manegement arayuze gerek yok onu kaldÄ±r
 
 courseControl.web
 	 public async Task<IActionResult> Create(CourseCreateInput courseCreateInput)  modelisvalid bak
 ** migration
-Add-Migration InitialMigration   ile oluþtur
+Add-Migration InitialMigration   ile oluï¿½tur
 update-database   db ye uygula

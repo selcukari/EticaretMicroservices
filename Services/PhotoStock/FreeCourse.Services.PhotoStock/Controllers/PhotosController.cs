@@ -45,6 +45,7 @@ namespace FreeCourse.Services.PhotoStock.Controllers
             return CreateActionResultInstance(Response<PhotoDto>.Fail("photo is empty.", 400));
         }
 
+        [HttpDelete]
         public IActionResult PhotoDelete(string photoUrl)
         {
             try
