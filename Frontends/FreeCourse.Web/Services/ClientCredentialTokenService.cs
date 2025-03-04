@@ -25,7 +25,7 @@ namespace FreeCourse.Web.Services
         public async Task<string> GetToken()
         {
             // cache de varmı diye kontrol et
-            var currentToken = await _clientAccessTokenCache.GetAsync("WebClientToken");
+            var currentToken = await _clientAccessTokenCache.GetAsync("WebClientToken", null);
 
             if (currentToken != null)
             {
@@ -57,7 +57,7 @@ namespace FreeCourse.Web.Services
                 throw newToken.Exception;
             }
             // cache ekle
-            await _clientAccessTokenCache.SetAsync("WebClientToken", newToken.AccessToken, newToken.ExpiresIn);
+            await _clientAccessTokenCache.SetAsync("WebClientToken", newToken.AccessToken, newToken.ExpiresIn, null);
 
             return newToken.AccessToken;
         }

@@ -1,7 +1,7 @@
 FROM mcr.microsoft.com/dotnet/sdk:3.1 as build
 WORKDIR /app
 EXPOSE 80
-COPY Shared/FreeCourse.Shared/*.csproj Shared/FreeCourse.Shared/
+#COPY Shared/FreeCourse.Shared/*.csproj Shared/FreeCourse.Shared/
 COPY IdentityServer/FreeCourse.IdentityServer/*.csproj IdentityServer/FreeCourse.IdentityServer/ 
 RUN dotnet restore  IdentityServer/FreeCourse.IdentityServer/*.csproj
 COPY . .
