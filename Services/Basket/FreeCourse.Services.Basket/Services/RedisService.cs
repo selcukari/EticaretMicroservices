@@ -17,7 +17,7 @@ namespace FreeCourse.Services.Basket.Services
         }
 
         public void Connect() => _ConnectionMultiplexer = ConnectionMultiplexer.Connect($"{_host}:{_port}");
-
+        // bir den fazla db var biz 1. db yi kullanacağız, digerlerinide test, vss.. için kullanabiliriz
         public IDatabase GetDb(int db = 1) => _ConnectionMultiplexer.GetDatabase(db);
     }
 }
