@@ -14,7 +14,6 @@ namespace FreeCourse.Services.Discount.Services
         public DiscountService(IConfiguration configuration)
         {
             _configuration = configuration;
-            var deneme = _configuration.GetConnectionString("PostgreSql");
 
             _dbConnection = new NpgsqlConnection(_configuration.GetConnectionString("PostgreSql"));
         }
@@ -42,7 +41,6 @@ namespace FreeCourse.Services.Discount.Services
             if (hasDiscounts.Count <= 0)
             {
                 return Response<List<Models.Discount>>.Fail("Discount not found", 200);
-                // return Response<Models.Discount>.Fail("Discount not found", 404);
             }
 
             return Response<List<Models.Discount>>.Success(hasDiscounts, 200);
