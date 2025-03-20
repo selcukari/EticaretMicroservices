@@ -2,14 +2,7 @@
 using FreeCourse.Services.Order.Application.Queries;
 using FreeCourse.Services.Order.Infrastructure;
 using MediatR;
-using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using FreeCourse.Shared.Dto;
-using AutoMapper.Internal.Mappers;
 using FreeCourse.Services.Order.Application.Mapping;
 using Microsoft.EntityFrameworkCore;
 
