@@ -30,9 +30,9 @@ namespace FreeCourse.Services.PhotoStock.Controllers
                   var fullPath = Path.Combine(folderPath, fileName);
 
                   using var stream = new FileStream(fullPath, FileMode.Create);
-                  await photo.CopyToAsync(stream, cancellationToken);
+                  await photo.CopyToAsync(stream, cancellationToken); // fotoyu kaydet
 
-                  var returnPath = $"{relativeFolder}/{fileName}".Replace("\\", "/");
+                var returnPath = $"{relativeFolder}/{fileName}".Replace("\\", "/");
 
                   PhotoDto photoDto = new() { Url = returnPath };
 

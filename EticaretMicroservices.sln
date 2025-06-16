@@ -10,9 +10,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FreeCourse.Services.Catelog", "Services\Catelog\FreeCourse.Services.Catelog\FreeCourse.Services.Catelog.csproj", "{F2042E5A-0155-4317-8DDE-C2D9F3E89BC7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SolutionItems", "SolutionItems", "{B17D60F9-0C1E-4720-A7BA-223FFB956921}"
-	ProjectSection(SolutionItems) = preProject
-		Ports.txt = Ports.txt
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{724CD568-2A4E-4F13-8AEA-D1FDC11305ED}"
 EndProject

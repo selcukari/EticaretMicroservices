@@ -28,7 +28,6 @@ namespace FreeCourse.Services.Catelog.Services
             _mapper = mapper;
 
             _publishEndpoint = publishEndpoint;
-            _publishEndpoint = publishEndpoint;
         }
         public async Task<Response<CourseDto>> CreateAsync(CourseCreateDto courseCreateDto)
         {
