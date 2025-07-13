@@ -3,13 +3,13 @@
     {
       "DownstreamPathTemplate": "/api/{everything}",
       "DownstreamScheme": "http",
-      "DownstreamHostAndPorts": [
+      "DownstreamHostAndPorts": [ // gateway in service yaptıgı istek
         {
           "Host": "localhost",
           "Port": 5011
         }
       ],
-      "UpstreamPathTemplate": "/services/catelog/{everything}",
+      "UpstreamPathTemplate": "/services/catelog/{everything}", // cliend in gateway e yaptıgı istek
       "UpstreamHttpMethod": [ "Get", "Post", "Put", "Delete" ],
       "UpstreamScheme": "http",
       "AuthenticationOptions": {
